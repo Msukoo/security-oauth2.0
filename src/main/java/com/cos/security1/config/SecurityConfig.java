@@ -3,6 +3,7 @@ package com.cos.security1.config;
 import lombok.Builder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity // spring security 필터(현재 config class)가 스프링 필터체인에 등록됨.
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @Secured({ROLE_NAME}) 활성화, @PreAuthorize @PostAuthorize 활성화
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
