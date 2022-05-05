@@ -1,6 +1,8 @@
 package com.cos.security1.config;
 
+import com.cos.security1.config.oauth.PrincipalOauth2UserService;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -10,9 +12,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity // spring security 필터(현재 config class)가 스프링 필터체인에 등록됨.
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @Secured({ROLE_NAME}) 활성화, @PreAuthorize @PostAuthorize 활성화
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public BCryptPasswordEncoder encodePwd(){
@@ -35,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService); // 구글 로그인 완료 후 후처리 필요(근데 난 로그인됨(..?)) Tip. 코드x (엑세스 토큰+사용자프로필정보 O)
     }
 }
